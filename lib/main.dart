@@ -1,8 +1,6 @@
 import 'package:chat_buddy/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
-import 'screens/auth/login_screen.dart';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -38,7 +36,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
 
-      //Main App
+      //Splash App
       home: const SplashScreen(),
     );
   }
