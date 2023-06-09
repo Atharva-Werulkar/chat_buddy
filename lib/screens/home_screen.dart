@@ -14,7 +14,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       //App BAR
       appBar: AppBar(
-        leading: const Icon(CupertinoIcons.home),
+        leading: const Icon(
+          Icons.home,
+          size: 30,
+        ),
         title: const Text("Chat Buddy"),
         actions: [
           //App BAR icons
