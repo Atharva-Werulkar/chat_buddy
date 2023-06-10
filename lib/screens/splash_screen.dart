@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:chat_buddy/main.dart';
 import 'package:chat_buddy/screens/home_screen.dart';
 import 'package:flutter/material.dart';
