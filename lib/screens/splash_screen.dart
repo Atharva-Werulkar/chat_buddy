@@ -1,9 +1,9 @@
 import 'dart:developer';
 
+import 'package:chat_buddy/api/apis.dart';
 import 'package:chat_buddy/main.dart';
 import 'package:chat_buddy/screens/auth/login_screen.dart';
 import 'package:chat_buddy/screens/home_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
@@ -26,10 +26,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
       //Check if user is already login to not
 
-      if (FirebaseAuth.instance.currentUser != null) {
+      if (APIs.auth.currentUser != null) {
         //print User Info
 
-        log("User:- ${FirebaseAuth.instance.currentUser}");
+        log("User:- ${APIs.auth.currentUser}");
 
         //Navigate to Home Screen
 

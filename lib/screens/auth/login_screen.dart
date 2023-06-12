@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:chat_buddy/api/apis.dart';
 import 'package:chat_buddy/components/dialogs.dart';
 import 'package:chat_buddy/main.dart';
 import 'package:chat_buddy/screens/home_screen.dart';
@@ -51,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       // Once signed in, return the UserCredential
-      return await FirebaseAuth.instance.signInWithCredential(credential);
+      return await APIs.auth.signInWithCredential(credential);
     } catch (e) {
       log('\n  _signInWithGoogle: $e');
       Dialogs.showSnakbar(context, 'Something Went Wrong (Check Internet!)!!');

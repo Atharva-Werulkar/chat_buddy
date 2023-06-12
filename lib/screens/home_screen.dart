@@ -1,6 +1,7 @@
-import 'package:flutter/cupertino.dart';
+import 'package:chat_buddy/api/apis.dart';
+import 'package:chat_buddy/main.dart';
+import 'package:chat_buddy/widgets/chat_card.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -33,11 +34,21 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.only(bottom: 40),
         child: FloatingActionButton(
           onPressed: () async {
-            await FirebaseAuth.instance.signOut();
+            await APIs.auth.signOut();
             await GoogleSignIn().signOut();
           },
           child: const Icon(Icons.add_reaction),
         ),
+      ),
+
+      // User Cards
+      body: ListView.builder(
+        padding: EdgeInsets.only(top: size.height * .005),
+        physics: const BouncingScrollPhysics(),
+        itemCount: 20,
+        itemBuilder: (context, index) {
+          return const ChatCard();
+        },
       ),
     );
   }
