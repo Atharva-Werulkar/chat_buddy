@@ -1,5 +1,10 @@
+import 'dart:developer';
+
 import 'package:chat_buddy/main.dart';
 import 'package:chat_buddy/screens/auth/login_screen.dart';
+import 'package:chat_buddy/screens/home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
@@ -20,13 +25,31 @@ class _SplashScreenState extends State<SplashScreen> {
       SystemChrome.setSystemUIOverlayStyle(
           const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 
-      SystemChrome.setPreferredOrientations(
-          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then(
-        (value) => Navigator.pushReplacement(
+      //Check if user is already login to not
+
+      if (FirebaseAuth.instance.currentUser != null) {
+        //print User Info
+
+        log("User:- ${FirebaseAuth.instance.currentUser}");
+
+        //Navigate to Home Screen
+
+        SystemChrome.setPreferredOrientations(
+                [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
+            .then(
+          (value) => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const HomeScreen()),
+          ),
+        );
+      } else {
+        //Navigate to LoginScreen
+
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => const LoginScreen()),
-        ),
-      );
+        );
+      }
     });
   }
 
