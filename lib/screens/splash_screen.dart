@@ -1,4 +1,5 @@
 import 'package:chat_buddy/main.dart';
+import 'package:chat_buddy/screens/auth/login_screen.dart';
 import 'package:chat_buddy/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
           [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then(
         (value) => Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const HomeScreen()),
+          MaterialPageRoute(builder: (_) => const LoginScreen()),
         ),
       );
     });

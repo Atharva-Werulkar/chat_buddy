@@ -67,6 +67,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '860361336756',
     projectId: 'chat-buddy-460bc',
     storageBucket: 'chat-buddy-460bc.appspot.com',
+    androidClientId: '860361336756-qqmcmmp50n8a35n7slcov5crjrfgdr9b.apps.googleusercontent.com',
     iosClientId: '860361336756-ajfkahd39vm9q4l073tk0709j2j3em8h.apps.googleusercontent.com',
     iosBundleId: 'com.example.chatBuddy',
   );
@@ -77,6 +78,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '860361336756',
     projectId: 'chat-buddy-460bc',
     storageBucket: 'chat-buddy-460bc.appspot.com',
+    androidClientId: '860361336756-qqmcmmp50n8a35n7slcov5crjrfgdr9b.apps.googleusercontent.com',
     iosClientId: '860361336756-u39un8bua9bm6rvkd7f3a94js09pu9p7.apps.googleusercontent.com',
     iosBundleId: 'com.example.chatBuddy.RunnerTests',
   );

@@ -16,12 +16,15 @@ dependencies:
   cupertino_icons: ^1.0.2
   # For Integratinf Firebase
   firebase_core: ^2.13.1
+  firebase_auth: ^4.6.2
+  google_sign_in: ^6.1.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   lottie: ^2.4.0
+  
  
   flutter_lints: ^2.0.0
 
