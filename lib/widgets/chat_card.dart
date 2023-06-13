@@ -1,8 +1,11 @@
 import 'package:chat_buddy/main.dart';
+import 'package:chat_buddy/models/chat_user.dart';
 import 'package:flutter/material.dart';
 
 class ChatCard extends StatefulWidget {
-  const ChatCard({super.key});
+  final ChatUser user;
+
+  const ChatCard({super.key, required this.user});
 
   @override
   State<ChatCard> createState() => _ChatCardState();
@@ -16,24 +19,27 @@ class _ChatCardState extends State<ChatCard> {
       elevation: 0.1,
       child: InkWell(
         onTap: () {},
-        child: const ListTile(
+        child: ListTile(
           //user Profile
 
-          leading: CircleAvatar(
+          leading: const CircleAvatar(
             child: Icon(Icons.person),
           ),
 
           //User Name
 
-          title: Text("Demo User"),
+          title: Text(widget.user.name),
 
           //last Message
 
-          subtitle: Text("Last sended Message"),
+          subtitle: Text(
+            widget.user.about,
+            maxLines: 1,
+          ),
 
           //Last Message time
 
-          trailing: Text(
+          trailing: const Text(
             "12:00 PM",
             style: TextStyle(color: Colors.black54),
           ),

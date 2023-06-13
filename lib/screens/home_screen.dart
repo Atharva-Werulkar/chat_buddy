@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:chat_buddy/api/apis.dart';
 import 'package:chat_buddy/main.dart';
+import 'package:chat_buddy/models/chat_user.dart';
 import 'package:chat_buddy/widgets/chat_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -15,6 +16,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<ChatUser> list = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,24 +51,43 @@ class _HomeScreenState extends State<HomeScreen> {
       body: StreamBuilder(
         stream: APIs.firestore.collection('users').snapshots(),
         builder: (context, snapshot) {
-          final list = [];
-          if (snapshot.hasData) {
-            final data = snapshot.data?.docs;
-            for (var i in data!) {
-              log('Data: ${jsonEncode(i.data())}');
-              list.add(i.data()['name']);
-            }
-          }
+          switch (snapshot.connectionState) {
+            //if the data is loading
+            case ConnectionState.waiting:
+            case ConnectionState.none:
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
 
-          return ListView.builder(
-            padding: EdgeInsets.only(top: size.height * .005),
-            physics: const BouncingScrollPhysics(),
-            itemCount: list.length,
-            itemBuilder: (context, index) {
-              // return const ChatCard();
-              return Text('Name: ${list[index]}');
-            },
-          );
+            //if some or all data is Loaded the show it
+            case ConnectionState.active:
+            case ConnectionState.done:
+              final data = snapshot.data?.docs;
+              list =
+                  data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
+
+              if (list.isNotEmpty) {
+                return ListView.builder(
+                  padding: EdgeInsets.only(top: size.height * .005),
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: list.length,
+                  itemBuilder: (context, index) {
+                    return ChatCard(
+                      user: list[index],
+                    );
+                  },
+                );
+              } else {
+                return const Center(
+                    child: Text(
+                  textAlign: TextAlign.center,
+                  "No Connection Found !!\n Connect to new people's",
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ));
+              }
+          }
         },
       ),
     );

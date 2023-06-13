@@ -76,10 +76,10 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Stack(
         children: [
           Positioned(
-            top: size.height * .15,
-            left: size.width * .25,
-            width: size.width * .5,
-            child: Lottie.asset('assets/lottiefiles/message.json'),
+            top: size.height * .10,
+            left: size.width * .0,
+            width: size.width,
+            child: Lottie.asset('assets/lottiefiles/WAVE.json'),
           ),
           Positioned(
             bottom: size.height * .15,
