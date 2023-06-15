@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:chat_buddy/api/apis.dart';
 import 'package:chat_buddy/main.dart';
 import 'package:chat_buddy/models/chat_user.dart';
+import 'package:chat_buddy/screens/profile_screen.dart';
 import 'package:chat_buddy/widgets/chat_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -31,7 +32,16 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           //App BAR icons
           IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => ProfileScreen(
+                              user: list[0],
+                            )));
+              },
+              icon: const Icon(Icons.more_vert))
         ],
       ),
 
