@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               user: list[0],
                             )));
               },
-              icon: const Icon(Icons.more_vert))
+              icon: const Icon(Icons.person))
         ],
       ),
 
