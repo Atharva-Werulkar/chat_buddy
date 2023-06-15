@@ -19,18 +19,32 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   _handleBtnClick() {
+    //for showing progress bar
     Dialogs.showProgressBar(context);
-    _signInWithGoogle().then((user) {
+
+    _signInWithGoogle().then((user) async {
+      //for hiding progress bar
       Navigator.pop(context);
+
       if (user != null) {
         log("User:- ${user.user}");
         log("User Info :- ${user.additionalUserInfo}");
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => const HomeScreen(),
-          ),
-        );
+
+        if ((await APIs.userExists())) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const HomeScreen(),
+            ),
+          );
+        } else {
+          APIs.createUser().then((value) => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const HomeScreen(),
+                ),
+              ));
+        }
       }
     });
   }
