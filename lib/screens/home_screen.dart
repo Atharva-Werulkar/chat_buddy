@@ -17,7 +17,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<ChatUser> list = [];
+  //for storing all users
+  List<ChatUser> _list = [];
+
+//for storing sreached items
+  final List<ChatUser> _searchlist = [];
+
+  //for storing search status
+  bool _isSearching = false;
+
+  @override
+  void initState() {
+    super.initState();
+    APIs.getSelfInfo();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,17 +41,29 @@ class _HomeScreenState extends State<HomeScreen> {
           Icons.home,
           size: 30,
         ),
-        title: const Text("Chat Buddy"),
+        title: _isSearching
+            ? const TextField(
+                decoration: InputDecoration(
+                    border: InputBorder.none, hintText: 'Name, Email, ...'),
+                autofocus: true,
+              )
+            : const Text("Chat Buddy"),
         actions: [
           //App BAR icons
-          IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  _isSearching = !_isSearching;
+                });
+              },
+              icon: Icon(_isSearching ? Icons.clear : Icons.search)),
           IconButton(
               onPressed: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (_) => ProfileScreen(
-                              user: list[0],
+                              user: APIs.me,
                             )));
               },
               icon: const Icon(Icons.person))
@@ -59,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       // User Cards
       body: StreamBuilder(
-        stream: APIs.firestore.collection('users').snapshots(),
+        stream: APIs.getAllUsers(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             //if the data is loading
@@ -73,17 +98,17 @@ class _HomeScreenState extends State<HomeScreen> {
             case ConnectionState.active:
             case ConnectionState.done:
               final data = snapshot.data?.docs;
-              list =
+              _list =
                   data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
 
-              if (list.isNotEmpty) {
+              if (_list.isNotEmpty) {
                 return ListView.builder(
                   padding: EdgeInsets.only(top: size.height * .005),
                   physics: const BouncingScrollPhysics(),
-                  itemCount: list.length,
+                  itemCount: _list.length,
                   itemBuilder: (context, index) {
                     return ChatCard(
-                      user: list[index],
+                      user: _list[index],
                     );
                   },
                 );
