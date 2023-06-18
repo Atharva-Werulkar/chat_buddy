@@ -62,5 +62,19 @@
 	</dict>
 </array>
 
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) uses camera for video calls</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>$(PRODUCT_NAME) uses microphone for audio calls</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) uses photo library for sending images.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>$(PRODUCT_NAME) uses photo library for saving images.</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+
 </dict>
 </plist>
