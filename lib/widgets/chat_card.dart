@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_buddy/main.dart';
 import 'package:chat_buddy/models/chat_user.dart';
+import 'package:chat_buddy/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 
 class ChatCard extends StatefulWidget {
@@ -19,7 +20,14 @@ class _ChatCardState extends State<ChatCard> {
       margin: EdgeInsets.symmetric(horizontal: size.width * .02, vertical: 5),
       elevation: 0.1,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => ChatScreen(
+                        user: widget.user,
+                      )));
+        },
         child: ListTile(
             //user Profile
 
