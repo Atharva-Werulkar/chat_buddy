@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_buddy/main.dart';
 import 'package:chat_buddy/models/chat_user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ChatScreen extends StatefulWidget {
   final ChatUser user;
@@ -13,13 +14,73 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   @override
+  void initState() {
+    super.initState();
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: Colors.transparent));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          appBar: AppBar(
-        automaticallyImplyLeading: false,
-        flexibleSpace: _appBar(),
-      )),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          flexibleSpace: _appBar(),
+        ),
+
+        //body
+        body: Column(
+          children: [
+            Expanded(
+              child: StreamBuilder(
+                // stream: APIs.getAllUsers(),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    //if the data is loading
+                    case ConnectionState.waiting:
+                    case ConnectionState.none:
+                    // return const Center(
+                    //   child: CircularProgressIndicator(),
+                    // );
+
+                    //if some or all data is Loaded the show it
+                    case ConnectionState.active:
+                    case ConnectionState.done:
+                      // final data = snapshot.data?.docs;
+                      // _list =
+                      //     data?.map((e) => ChatUser.fromJson(e.data())).toList() ??
+                      //         [];
+
+                      final _list = [];
+
+                      if (_list.isNotEmpty) {
+                        return ListView.builder(
+                          padding: EdgeInsets.only(top: size.height * .005),
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return Text("Message: ${_list[index]}");
+                          },
+                        );
+                      } else {
+                        return const Center(
+                            child: Text(
+                          textAlign: TextAlign.center,
+                          "Say Hi!! 👋",
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                        ));
+                      }
+                  }
+                },
+              ),
+            ),
+            _chatBody(),
+          ],
+        ),
+      ),
     );
   }
 
@@ -71,6 +132,82 @@ class _ChatScreenState extends State<ChatScreen> {
           ],
         )
       ],
+    );
+  }
+
+  Widget _chatBody() {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          vertical: size.height * .01, horizontal: size.width * .020),
+      child: Row(
+        children: [
+          //input field and buttons
+
+          Expanded(
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Row(
+                children: [
+                  //emoji button
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.emoji_emotions,
+                      size: 26,
+                    ),
+                  ),
+
+                  //input field
+                  const Expanded(
+                    child: TextField(
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Type a message',
+                      ),
+                    ),
+                  ),
+
+                  //pick image from gallery
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.image,
+                      size: 26,
+                    ),
+                  ),
+
+                  //pick image from camera
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(
+                      Icons.camera_alt,
+                      size: 26,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          //send button
+          MaterialButton(
+              onPressed: () {},
+              shape: const CircleBorder(),
+              // height: size.heig0ht,
+              minWidth: 50,
+              padding: const EdgeInsets.only(
+                  top: 10, bottom: 10, right: 5, left: 10),
+              color: Colors.white70,
+              child: const Icon(
+                Icons.send,
+                size: 28,
+              )),
+        ],
+      ),
     );
   }
 }
