@@ -1,6 +1,13 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chat_buddy/api/apis.dart';
 import 'package:chat_buddy/main.dart';
 import 'package:chat_buddy/models/chat_user.dart';
+import 'package:chat_buddy/models/message.dart';
+import 'package:chat_buddy/widgets/message_card.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -13,6 +20,9 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  //for staring all messages
+  List<Message> _list = [];
+
   @override
   void initState() {
     super.initState();
@@ -24,44 +34,65 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      maintainBottomViewPadding: true,
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
           flexibleSpace: _appBar(),
         ),
+        // backgroundColor: Colors.,
 
         //body
         body: Column(
           children: [
             Expanded(
               child: StreamBuilder(
-                // stream: APIs.getAllUsers(),
+                stream: APIs.getAllMessages(),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     //if the data is loading
                     case ConnectionState.waiting:
                     case ConnectionState.none:
-                    // return const Center(
-                    //   child: CircularProgressIndicator(),
-                    // );
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
 
                     //if some or all data is Loaded the show it
                     case ConnectionState.active:
                     case ConnectionState.done:
-                      // final data = snapshot.data?.docs;
+                      final data = snapshot.data?.docs;
+                      log('Data: ${jsonEncode(data![0].data())}');
                       // _list =
                       //     data?.map((e) => ChatUser.fromJson(e.data())).toList() ??
                       //         [];
 
-                      final _list = [];
+                      _list.clear();
+                      _list.add(Message(
+                          msg: "hi",
+                          toId: "xyz",
+                          read: '',
+                          type: Type.text,
+                          sent: "12:00 AM",
+                          fromId: APIs.user.uid));
+
+                      _list.add(Message(
+                          msg: "hi",
+                          toId: APIs.user.uid,
+                          read: '',
+                          type: Type.text,
+                          sent: "12:00 AM",
+                          fromId: "xyz"));
 
                       if (_list.isNotEmpty) {
                         return ListView.builder(
                           padding: EdgeInsets.only(top: size.height * .005),
                           physics: const BouncingScrollPhysics(),
                           itemBuilder: (context, index) {
-                            return Text("Message: ${_list[index]}");
+                            return MessageCard(
+                              message: _list[index],
+                            );
                           },
+                          itemCount: _list.length,
                         );
                       } else {
                         return const Center(
