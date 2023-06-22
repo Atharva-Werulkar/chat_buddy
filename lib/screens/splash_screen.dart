@@ -21,9 +21,9 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Future.delayed(const Duration(milliseconds: 4500), () {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-          statusBarColor: Colors.white,
-          systemNavigationBarColor: Colors.white));
+      // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      //     statusBarColor: Colors.white,
+      //     systemNavigationBarColor: Colors.white));
 
       //Check if user is already login to not
 

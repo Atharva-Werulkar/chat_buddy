@@ -23,6 +23,9 @@ class _ChatScreenState extends State<ChatScreen> {
   //for staring all messages
   List<Message> _list = [];
 
+//for handling message text change
+  final _textController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -31,7 +34,6 @@ class _ChatScreenState extends State<ChatScreen> {
         systemNavigationBarColor: Colors.transparent));
   }
 
-  @override
   Widget build(BuildContext context) {
     return SafeArea(
       maintainBottomViewPadding: true,
@@ -40,48 +42,31 @@ class _ChatScreenState extends State<ChatScreen> {
           automaticallyImplyLeading: false,
           flexibleSpace: _appBar(),
         ),
-        // backgroundColor: Colors.,
+        // backgroundColor: Colors.white,
 
         //body
         body: Column(
           children: [
             Expanded(
               child: StreamBuilder(
-                stream: APIs.getAllMessages(),
+                stream: APIs.getAllMessages(widget.user),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     //if the data is loading
                     case ConnectionState.waiting:
                     case ConnectionState.none:
                       return const Center(
-                        child: CircularProgressIndicator(),
+                        child: SizedBox(),
                       );
 
                     //if some or all data is Loaded the show it
                     case ConnectionState.active:
                     case ConnectionState.done:
                       final data = snapshot.data?.docs;
-                      log('Data: ${jsonEncode(data![0].data())}');
-                      // _list =
-                      //     data?.map((e) => ChatUser.fromJson(e.data())).toList() ??
-                      //         [];
-
-                      _list.clear();
-                      _list.add(Message(
-                          msg: "hi",
-                          toId: "xyz",
-                          read: '',
-                          type: Type.text,
-                          sent: "12:00 AM",
-                          fromId: APIs.user.uid));
-
-                      _list.add(Message(
-                          msg: "hi",
-                          toId: APIs.user.uid,
-                          read: '',
-                          type: Type.text,
-                          sent: "12:00 AM",
-                          fromId: "xyz"));
+                      _list = data
+                              ?.map((e) => Message.fromJson(e.data()))
+                              .toList() ??
+                          [];
 
                       if (_list.isNotEmpty) {
                         return ListView.builder(
@@ -191,11 +176,12 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
 
                   //input field
-                  const Expanded(
+                  Expanded(
                     child: TextField(
+                      controller: _textController,
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Type a message',
                       ),
@@ -226,7 +212,12 @@ class _ChatScreenState extends State<ChatScreen> {
 
           //send button
           MaterialButton(
-              onPressed: () {},
+              onPressed: () {
+                if (_textController.text.isNotEmpty) {
+                  APIs.sendMessage(widget.user, _textController.text);
+                  _textController.text = '';
+                }
+              },
               shape: const CircleBorder(),
               // height: size.heig0ht,
               minWidth: 50,

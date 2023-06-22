@@ -29,9 +29,9 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     APIs.getSelfInfo();
     super.initState();
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        systemNavigationBarColor: Colors.transparent));
+    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    //     statusBarColor: Colors.transparent,
+    //     systemNavigationBarColor: Colors.transparent));
   }
 
   @override
