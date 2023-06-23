@@ -4,7 +4,6 @@ import 'package:chat_buddy/models/chat_user.dart';
 import 'package:chat_buddy/screens/profile_screen.dart';
 import 'package:chat_buddy/widgets/chat_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class HomeScreen extends StatefulWidget {

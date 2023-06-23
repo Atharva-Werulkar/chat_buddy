@@ -1,13 +1,9 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_buddy/api/apis.dart';
 import 'package:chat_buddy/main.dart';
 import 'package:chat_buddy/models/chat_user.dart';
 import 'package:chat_buddy/models/message.dart';
 import 'package:chat_buddy/widgets/message_card.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -34,6 +30,7 @@ class _ChatScreenState extends State<ChatScreen> {
         systemNavigationBarColor: Colors.transparent));
   }
 
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       maintainBottomViewPadding: true,

@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:chat_buddy/api/apis.dart';
 import 'package:chat_buddy/main.dart';
 import 'package:chat_buddy/models/message.dart';
@@ -83,7 +85,7 @@ class _MessageCardState extends State<MessageCard> {
 
             //read time
             Text(
-              widget.message.read + '12:00AM',
+              '${widget.message.read}12:00AM',
               style: const TextStyle(fontSize: 13, color: Colors.black54),
             ),
           ],
