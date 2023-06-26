@@ -9,6 +9,7 @@ import 'package:chat_buddy/components/dialogs.dart';
 import 'package:chat_buddy/main.dart';
 import 'package:chat_buddy/models/chat_user.dart';
 import 'package:chat_buddy/screens/auth/login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
@@ -44,10 +45,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onPressed: () async {
               Dialogs.showProgressBar(context);
 
+              await APIs.updateActiveStatus(false);
+
+              //signout from app
               await APIs.auth.signOut().then((value) async {
                 await GoogleSignIn().signOut().then((value) {
+                  //for hiding progress bar
                   Navigator.pop(context);
+
+                  //for moving to home screen
                   Navigator.pop(context);
+
+                  APIs.auth = FirebaseAuth.instance;
+
+                  //for moving to login screen
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (_) => const LoginScreen()));
                 });

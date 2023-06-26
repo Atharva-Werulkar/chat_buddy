@@ -7,6 +7,7 @@ import 'package:chat_buddy/components/date_util.dart';
 import 'package:chat_buddy/main.dart';
 import 'package:chat_buddy/models/chat_user.dart';
 import 'package:chat_buddy/models/message.dart';
+import 'package:chat_buddy/screens/view_profile_screen.dart';
 import 'package:chat_buddy/widgets/message_card.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
@@ -162,7 +163,12 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget _appBar() {
     return InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => ViewProfileScreen(user: widget.user)));
+        },
         child: StreamBuilder(
           stream: APIs.getUserInfo(widget.user),
           builder: (context, snapshot) {
@@ -267,8 +273,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       onTap: () {
-                        if (_showEmoji)
+                        if (_showEmoji) {
                           setState(() => _showEmoji = !_showEmoji);
+                        }
                       },
                       decoration: const InputDecoration(
                         border: InputBorder.none,
