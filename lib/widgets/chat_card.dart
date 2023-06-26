@@ -5,6 +5,7 @@ import 'package:chat_buddy/main.dart';
 import 'package:chat_buddy/models/chat_user.dart';
 import 'package:chat_buddy/models/message.dart';
 import 'package:chat_buddy/screens/chat_screen.dart';
+import 'package:chat_buddy/widgets/dialogs/profile_dialogs.dart';
 import 'package:flutter/material.dart';
 
 class ChatCard extends StatefulWidget {
@@ -49,14 +50,21 @@ class _ChatCardState extends State<ChatCard> {
             return ListTile(
               //user Profile
 
-              leading: ClipRRect(
-                borderRadius: BorderRadius.circular(size.height * .3),
-                child: CachedNetworkImage(
-                  width: size.height * .055,
-                  height: size.height * .055,
-                  imageUrl: widget.user.image,
-                  errorWidget: (context, url, error) => const CircleAvatar(
-                    child: Icon(Icons.person),
+              leading: InkWell(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) => ProfileDialog(user: widget.user));
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(size.height * .3),
+                  child: CachedNetworkImage(
+                    width: size.height * .055,
+                    height: size.height * .055,
+                    imageUrl: widget.user.image,
+                    errorWidget: (context, url, error) => const CircleAvatar(
+                      child: Icon(Icons.person),
+                    ),
                   ),
                 ),
               ),
