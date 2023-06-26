@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_buddy/api/apis.dart';
+import 'package:chat_buddy/components/date_util.dart';
 import 'package:chat_buddy/main.dart';
 import 'package:chat_buddy/models/chat_user.dart';
 import 'package:chat_buddy/models/message.dart';
@@ -160,54 +161,76 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _appBar() {
-    return Row(
-      children: [
-        //back button
-        IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back),
-        ),
-        //user profile
-        Padding(
-          padding: const EdgeInsets.only(top: 4),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(size.height * .3),
-            child: CachedNetworkImage(
-              width: size.height * .05,
-              height: size.height * .05,
-              imageUrl: widget.user.image,
-              errorWidget: (context, url, error) => const CircleAvatar(
-                child: Icon(Icons.person),
-              ),
-            ),
-          ),
-        ),
+    return InkWell(
+        onTap: () {},
+        child: StreamBuilder(
+          stream: APIs.getUserInfo(widget.user),
+          builder: (context, snapshot) {
+            final data = snapshot.data?.docs;
 
-        //for adding some space
-        const SizedBox(
-          width: 10,
-        ),
+            final list =
+                data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
 
-        //user name and last seen
+            return Row(
+              children: [
+                //back button
+                IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.arrow_back),
+                ),
+                //user profile
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(size.height * .3),
+                    child: CachedNetworkImage(
+                      width: size.height * .05,
+                      height: size.height * .05,
+                      imageUrl:
+                          list.isNotEmpty ? list[0].image : widget.user.image,
+                      errorWidget: (context, url, error) => const CircleAvatar(
+                        child: Icon(Icons.person),
+                      ),
+                    ),
+                  ),
+                ),
 
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //user name
-            Text(
-              widget.user.name,
-              style: const TextStyle(fontSize: 18),
-            ),
-            //last seen
-            const Text(
-              'last seen today at 12:00',
-              style: TextStyle(fontSize: 14, color: Colors.black54),
-            ),
-          ],
-        )
-      ],
-    );
+                //for adding some space
+                const SizedBox(
+                  width: 10,
+                ),
+
+                //user name and last seen
+
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //user name
+                    Text(
+                      list.isNotEmpty ? list[0].name : widget.user.name,
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                    //last seen
+                    Text(
+                      list.isNotEmpty
+                          ? list[0].isOnline
+                              ? 'Online'
+                              : MyDateUtil.getLastActiveTime(
+                                  context: context,
+                                  lastActive: list[0].lastActive)
+                          : MyDateUtil.getLastActiveTime(
+                              context: context,
+                              lastActive: widget.user.lastActive),
+                      style:
+                          const TextStyle(fontSize: 14, color: Colors.black54),
+                    ),
+                  ],
+                )
+              ],
+            );
+          },
+        ));
   }
 
   Widget _chatBody() {

@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:chat_buddy/api/apis.dart';
 import 'package:chat_buddy/main.dart';
 import 'package:chat_buddy/models/chat_user.dart';
 import 'package:chat_buddy/screens/profile_screen.dart';
 import 'package:chat_buddy/widgets/chat_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -27,10 +30,19 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     APIs.getSelfInfo();
-    super.initState();
-    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    //     statusBarColor: Colors.transparent,
-    //     systemNavigationBarColor: Colors.transparent));
+    //for setting user status to active
+    APIs.updateActiveStatus(true);
+
+    //for updating user active status according to lifecycle events
+    SystemChannels.lifecycle.setMessageHandler((message) {
+      log('Message: $message');
+      //resume -- active or online
+      if (message.toString().contains('resume')) APIs.updateActiveStatus(true);
+      //pause -- inactive or offline
+      if (message.toString().contains('pause')) APIs.updateActiveStatus(false);
+
+      return Future.value(message);
+    });
   }
 
   @override
