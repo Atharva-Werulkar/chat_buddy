@@ -70,7 +70,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
 
         // User Cards
-        //
         body: Form(
           key: _formkey,
           child: Padding(
@@ -222,7 +221,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-// To Pick Profile picture for users
+// Bottom sheet To Pick Profile picture for users
   void _showBottomSheet() {
     showModalBottomSheet(
         context: context,

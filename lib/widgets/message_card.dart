@@ -19,9 +19,13 @@ class MessageCard extends StatefulWidget {
 class _MessageCardState extends State<MessageCard> {
   @override
   Widget build(BuildContext context) {
-    return APIs.user.uid == widget.message.fromId
-        ? Widget_SendMessage()
-        : Widget_recivedMessage();
+    bool isMe = APIs.user.uid == widget.message.fromId;
+    return InkWell(
+      onLongPress: () {
+        _showBottomSheet(isMe);
+      },
+      child: isMe ? Widget_SendMessage() : Widget_recivedMessage(),
+    );
   }
 
 //Sended Message or Message From Me
@@ -113,15 +117,15 @@ class _MessageCardState extends State<MessageCard> {
             //for some space
             SizedBox(width: size.width * .04),
 
-            //blue tick
-            if (widget.message.read.isNotEmpty)
-              const Icon(
-                Icons.done_all,
-                color: Colors.blue,
-                size: 20,
-              ),
+            // //blue tick
+            // if (widget.message.read.isNotEmpty)
+            //   const Icon(
+            //     Icons.done_all,
+            //     color: Colors.blue,
+            //     size: 20,
+            //   ),
 
-            //for some space
+            // //for some space
 
             const SizedBox(width: 2),
 
@@ -175,6 +179,133 @@ class _MessageCardState extends State<MessageCard> {
           ),
         ),
       ],
+    );
+  }
+
+// Bottom sheet for modifying message details
+  void _showBottomSheet(bool isMe) {
+    showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+        builder: (_) {
+          return ListView(
+            shrinkWrap: true,
+            children: [
+              //black line/divider
+              Container(
+                height: 4,
+                margin: EdgeInsets.symmetric(
+                    vertical: size.height * .015, horizontal: size.width * .4),
+                decoration: BoxDecoration(
+                    color: Colors.grey, borderRadius: BorderRadius.circular(8)),
+              ),
+
+              widget.message.type == Type.text
+                  ? //Copy Option
+                  _OptionItem(
+                      icon: const Icon(
+                        Icons.copy_rounded,
+                        size: 26,
+                      ),
+                      name: 'Copy Text',
+                      onTap: () {})
+                  :
+
+                  //Save Image Option
+                  _OptionItem(
+                      icon: const Icon(
+                        Icons.download_rounded,
+                        size: 26,
+                      ),
+                      name: 'Save Image',
+                      onTap: () {}),
+
+              //Divider
+              if (isMe)
+                Divider(
+                  color: Colors.black54,
+                  endIndent: size.width * .04,
+                  indent: size.width * .04,
+                ),
+
+              //edit Option
+              if (widget.message.type == Type.text && isMe)
+                _OptionItem(
+                    icon: const Icon(
+                      Icons.edit_rounded,
+                      size: 26,
+                    ),
+                    name: 'Edit Message',
+                    onTap: () {}),
+
+              //Delet Option
+              if (isMe)
+                _OptionItem(
+                    icon: const Icon(
+                      Icons.delete_forever_rounded,
+                      size: 26,
+                    ),
+                    name: 'Delet Message',
+                    onTap: () {}),
+
+              //Divider
+              Divider(
+                color: Colors.black54,
+                endIndent: size.width * .04,
+                indent: size.width * .04,
+              ),
+
+              //Sent time
+              _OptionItem(
+                  icon: const Icon(
+                    Icons.send_rounded,
+                  ),
+                  name: 'Sent At: ',
+                  onTap: () {}),
+
+              //Read time
+              _OptionItem(
+                  icon: const Icon(
+                    Icons.remove_red_eye_rounded,
+                  ),
+                  name: 'Read At',
+                  onTap: () {}),
+            ],
+          );
+        });
+  }
+}
+
+//Option Item for bottom sheet
+class _OptionItem extends StatelessWidget {
+  final Icon icon;
+  final String name;
+  final VoidCallback onTap;
+
+  const _OptionItem(
+      {required this.icon, required this.name, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => onTap(),
+      child: Padding(
+        padding: EdgeInsets.only(
+            left: size.width * .05,
+            top: size.height * .015,
+            bottom: size.height * .02),
+        child: Row(
+          children: [
+            icon,
+            SizedBox(
+              width: size.width * .03,
+            ),
+            Flexible(child: Text(name))
+          ],
+        ),
+      ),
     );
   }
 }
