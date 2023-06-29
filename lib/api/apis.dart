@@ -39,6 +39,15 @@ class APIs {
         log('push_token $t');
       }
     });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      log('Got a message whilst in the foreground!');
+      log('Message data: ${message.data}');
+
+      if (message.notification != null) {
+        log('Message also contained a notification: ${message.notification}');
+      }
+    });
   }
 
   //for sending push notification
@@ -50,7 +59,11 @@ class APIs {
         "notification": {
           "title": chatUser.name,
           "body": msg,
-        }
+          "android_channel_id": "chats",
+        },
+        "data": {
+          "some_data": "User ID: ${me.id}}",
+        },
       };
       var res = await post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
           headers: {

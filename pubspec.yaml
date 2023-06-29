@@ -34,6 +34,9 @@ dependencies:
 
   #for calling Rest API
   http: ^0.13.0
+  
+  #for notification channel
+  flutter_notification_channel: ^2.0.0
 
 dev_dependencies:
   flutter_test:
