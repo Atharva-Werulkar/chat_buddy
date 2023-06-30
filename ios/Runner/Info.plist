@@ -62,6 +62,7 @@
 	</dict>
 </array>
 
+	<!-- Permission For picking image from gallery and camera  -->
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) uses camera for video calls</string>
 	<key>NSMicrophoneUsageDescription</key>
@@ -75,6 +76,7 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-
+<!--For saving image into gallery-->
+	<key>NSPhotoLibraryUsageDescription</key>
 </dict>
 </plist>

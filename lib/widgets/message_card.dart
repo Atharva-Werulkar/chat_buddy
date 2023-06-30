@@ -1,5 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_buddy/api/apis.dart';
 import 'package:chat_buddy/components/date_util.dart';
@@ -8,6 +10,7 @@ import 'package:chat_buddy/main.dart';
 import 'package:chat_buddy/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 
 class MessageCard extends StatefulWidget {
   const MessageCard({super.key, required this.message});
@@ -231,7 +234,23 @@ class _MessageCardState extends State<MessageCard> {
                         size: 26,
                       ),
                       name: 'Save Image',
-                      onTap: () {}),
+                      onTap: () async {
+                        try {
+                          await GallerySaver.saveImage(widget.message.msg,
+                                  albumName: 'Chat Buddy')
+                              .then((success) {
+                            //close bottom sheet
+                            Navigator.pop(context);
+                            if (success != null && success) {
+                              Dialogs.showSnakbar(context, "Image Saved");
+                            } else {
+                              Dialogs.showSnakbar(context, "Image Not Saved");
+                            }
+                          });
+                        } catch (e) {
+                          log('ErrorWhileSavingImage $e');
+                        }
+                      }),
 
               //Divider
               if (isMe)
