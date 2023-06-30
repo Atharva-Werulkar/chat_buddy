@@ -1,9 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- storage Permission -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE">
-    <!-- Internet Permission -->
-    <uses-permission android:name="android.permission.INTERNET">
+     <!-- storage Permission -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+     <!-- Internet Permission -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:label="Chat Buddy"
