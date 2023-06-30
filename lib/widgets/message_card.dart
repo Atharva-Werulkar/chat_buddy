@@ -3,9 +3,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_buddy/api/apis.dart';
 import 'package:chat_buddy/components/date_util.dart';
+import 'package:chat_buddy/components/dialogs.dart';
 import 'package:chat_buddy/main.dart';
 import 'package:chat_buddy/models/message.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class MessageCard extends StatefulWidget {
   const MessageCard({super.key, required this.message});
@@ -210,7 +212,16 @@ class _MessageCardState extends State<MessageCard> {
                         size: 26,
                       ),
                       name: 'Copy Text',
-                      onTap: () {})
+                      //copy text to clipboard
+                      onTap: () async {
+                        await Clipboard.setData(
+                                ClipboardData(text: widget.message.msg))
+                            .then((value) {
+                          //close bottom sheet
+                          Navigator.pop(context);
+                          Dialogs.showSnakbar(context, "Text Copied");
+                        });
+                      })
                   :
 
                   //Save Image Option
@@ -248,7 +259,13 @@ class _MessageCardState extends State<MessageCard> {
                       size: 26,
                     ),
                     name: 'Delet Message',
-                    onTap: () {}),
+                    onTap: () async {
+                      await APIs.deleteMessage(widget.message).then((value) {
+                        //close bottom sheet
+                        Navigator.pop(context);
+                        Dialogs.showSnakbar(context, "Message Deleted");
+                      });
+                    }),
 
               //Divider
               Divider(
@@ -262,7 +279,8 @@ class _MessageCardState extends State<MessageCard> {
                   icon: const Icon(
                     Icons.send_rounded,
                   ),
-                  name: 'Sent At: ',
+                  name:
+                      'Sent At: ${MyDateUtil.getMessageTime(context: context, time: widget.message.sent)}',
                   onTap: () {}),
 
               //Read time
@@ -270,7 +288,9 @@ class _MessageCardState extends State<MessageCard> {
                   icon: const Icon(
                     Icons.remove_red_eye_rounded,
                   ),
-                  name: 'Read At',
+                  name: widget.message.read.isEmpty
+                      ? 'Read At: Not Read Yet'
+                      : 'Read At ${MyDateUtil.getMessageTime(context: context, time: widget.message.read)}',
                   onTap: () {}),
             ],
           );

@@ -123,7 +123,7 @@ class APIs {
         .set(chatUser.toJson());
   }
 
-//for getting all Users
+  //for getting all Users
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers() {
     return firestore
@@ -141,7 +141,7 @@ class APIs {
     });
   }
 
-//for updating user profile picture
+  //for updating user profile picture
   static Future<void> updateProfilePicture(File file) async {
     //getting extension of file
     final ext = file.path.split('.').last;
@@ -165,7 +165,7 @@ class APIs {
     });
   }
 
-//for getting specific users info
+  //for getting specific users info
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getUserInfo(
       ChatUser chatUser) {
@@ -175,7 +175,7 @@ class APIs {
         .snapshots();
   }
 
-//updating online or last active status of user
+  //updating online or last active status of user
 
   static Future<void> updateActiveStatus(bool isOnline) async {
     firestore.collection('users').doc(user.uid).update({
@@ -185,14 +185,14 @@ class APIs {
     });
   }
 
-//-----Chat Screen Related APIs-----//
+  //-----Chat Screen Related APIs-----//
 
-//for getting converstion id
+  //for getting converstion id
   static String getConversationId(String id) => user.uid.hashCode <= id.hashCode
       ? '${user.uid}_$id'
       : '${id}_${user.uid}';
 
-//for getting all messages of a specific conversations from firestore database
+  //for getting all messages of a specific conversations from firestore database
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllMessages(
       ChatUser user) {
@@ -234,7 +234,7 @@ class APIs {
         .update({'read': DateTime.now().millisecondsSinceEpoch.toString()});
   }
 
-//get only last message of a specific chat
+  //get only last message of a specific chat
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getLastMessage(
       ChatUser user) {
@@ -265,5 +265,20 @@ class APIs {
     //updating user profile picture
     final imageUrl = await ref.getDownloadURL();
     await sendMessage(chatUser, imageUrl, Type.image);
+  }
+
+  //for deleting message
+  static Future<void> deleteMessage(Message message) async {
+    await firestore
+        .collection('chats/${getConversationId(message.toId)}/messages/')
+        .doc(message.sent)
+        .delete();
+
+    //delete image from firebase storage
+
+    if (message.type == Type.image) {
+      final ref = storage.refFromURL(message.msg);
+      await ref.delete();
+    }
   }
 }
