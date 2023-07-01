@@ -126,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 await APIs.auth.signOut();
                 await GoogleSignIn().signOut();
               },
-              child: const Icon(Icons.add_reaction),
+              child: const Icon(Icons.message_rounded),
             ),
           ),
 

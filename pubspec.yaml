@@ -22,6 +22,7 @@ dependencies:
   #To show images
   cached_network_image: ^3.2.3
   image_picker: ^0.8.9
+  image_cropper: ^1.4.1
 
   #For accessing Firebase Storage
   firebase_storage: ^11.2.3

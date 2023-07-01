@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Chat Buddy',
+
       theme: ThemeData(
         //  App BAR THEME
         appBarTheme: const AppBarTheme(

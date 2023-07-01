@@ -97,7 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 File(_image!),
                                 width: size.height * .2,
                                 height: size.height * .2,
-                                fit: BoxFit.cover,
+                                fit: BoxFit.contain,
                               ),
                             )
                           : ClipRRect(
