@@ -268,7 +268,12 @@ class _MessageCardState extends State<MessageCard> {
                       size: 26,
                     ),
                     name: 'Edit Message',
-                    onTap: () {}),
+                    onTap: () {
+                      //close bottom sheet
+                      Navigator.pop(context);
+                      //open edit message dialog
+                      _showMessageUpdateDialog();
+                    }),
 
               //Delet Option
               if (isMe)
@@ -314,6 +319,70 @@ class _MessageCardState extends State<MessageCard> {
             ],
           );
         });
+  }
+
+  //Edit Message Dialog
+  void _showMessageUpdateDialog() {
+    String message = widget.message.msg;
+
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+              contentPadding: const EdgeInsets.only(
+                  left: 24, right: 24, top: 20, bottom: 10),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              title: const Row(
+                children: [
+                  Icon(
+                    Icons.edit_rounded,
+                    size: 25,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text('Edit Message'),
+                ],
+              ),
+
+              //content
+              content: TextFormField(
+                maxLines: null,
+                onChanged: (value) {
+                  message = value;
+                },
+                initialValue: message,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                ),
+              ),
+              //action
+              actions: [
+                //cancel button
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    MaterialButton(
+                      onPressed: () {
+                        //close dialog
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Cancle'),
+                    ),
+                    //Update button
+                    MaterialButton(
+                      onPressed: () {
+                        //close dialog
+                        Navigator.pop(context);
+                        APIs.editMessage(widget.message, message);
+                      },
+                      child: const Text('Update'),
+                    ),
+                  ],
+                )
+              ],
+            ));
   }
 }
 

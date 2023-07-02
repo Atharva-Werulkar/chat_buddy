@@ -7,7 +7,7 @@ import 'package:chat_buddy/screens/profile_screen.dart';
 import 'package:chat_buddy/widgets/chat_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:chat_buddy/components/dialogs.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -122,9 +122,8 @@ class _HomeScreenState extends State<HomeScreen> {
           floatingActionButton: Padding(
             padding: const EdgeInsets.only(bottom: 40),
             child: FloatingActionButton(
-              onPressed: () async {
-                await APIs.auth.signOut();
-                await GoogleSignIn().signOut();
+              onPressed: () {
+                _addChatUserDialog();
               },
               child: const Icon(Icons.message_rounded),
             ),
@@ -179,5 +178,78 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+//add friend
+  void _addChatUserDialog() {
+    String email = '';
+
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+              contentPadding: const EdgeInsets.only(
+                  left: 24, right: 24, top: 20, bottom: 10),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              title: const Row(
+                children: [
+                  Icon(
+                    Icons.person_add_rounded,
+                    size: 25,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text('Add Friend'),
+                ],
+              ),
+
+              //content
+              content: TextFormField(
+                maxLines: null,
+                onChanged: (value) {
+                  email = value;
+                },
+                decoration: InputDecoration(
+                  hintText: 'Enter Email',
+                  prefixIcon: const Icon(Icons.email_rounded),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                ),
+              ),
+              //action
+              actions: [
+                //cancel button
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    MaterialButton(
+                      onPressed: () {
+                        //close dialog
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Cancle'),
+                    ),
+                    //Add button
+                    MaterialButton(
+                      onPressed: () {
+                        //close dialog
+                        Navigator.pop(context);
+                        if (email.isNotEmpty) {
+                          APIs.addChatUser(email).then((value) {
+                            if (value) {
+                              Dialogs.showSnakbar(context, 'User Added');
+                            } else {
+                              Dialogs.showSnakbar(context, 'User Not Found');
+                            }
+                          });
+                        }
+                      },
+                      child: const Text('Add'),
+                    ),
+                  ],
+                )
+              ],
+            ));
   }
 }

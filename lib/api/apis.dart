@@ -85,6 +85,34 @@ class APIs {
     return (await firestore.collection('users').doc(user.uid).get()).exists;
   }
 
+  //for adding new user to firestore database
+
+  static Future<bool> addChatUser(String email) async {
+    final data = await firestore
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .get();
+    log('Data: ${data.docs}');
+
+    if (data.docs.isNotEmpty && data.docs.first.id != user.uid) {
+      //user exists
+
+      log('user exist: ${data.docs.first.data()}');
+
+      firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('my_users')
+          .doc(data.docs.first.id)
+          .set({});
+
+      return true;
+    } else {
+      //user not exists
+      return false;
+    }
+  }
+
   //for showing logined user info
   static Future<void> getSelfInfo() async {
     await firestore.collection('users').doc(user.uid).get().then((user) async {
@@ -142,6 +170,7 @@ class APIs {
   }
 
   //for updating user profile picture
+
   static Future<void> updateProfilePicture(File file) async {
     //getting extension of file
     final ext = file.path.split('.').last;
@@ -280,5 +309,13 @@ class APIs {
       final ref = storage.refFromURL(message.msg);
       await ref.delete();
     }
+  }
+
+  //for editing message
+  static Future<void> editMessage(Message message, String editedMessage) async {
+    await firestore
+        .collection('chats/${getConversationId(message.toId)}/messages/')
+        .doc(message.sent)
+        .update({'msg': editedMessage});
   }
 }

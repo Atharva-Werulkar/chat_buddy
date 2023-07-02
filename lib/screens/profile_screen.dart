@@ -177,7 +177,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     validator: (val) =>
                         val != null && val.isNotEmpty ? null : "Required Field",
                     decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.person),
+                        prefixIcon: const Icon(
+                          Icons.info_outline,
+                          size: 28,
+                        ),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15)),
                         hintText: 'Enter Something About You',
