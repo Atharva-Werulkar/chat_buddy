@@ -241,9 +241,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget _chatBody() {
     return Padding(
-      padding: EdgeInsets.symmetric(
-          vertical: size.height * .01, horizontal: size.width * .020),
+      padding: const EdgeInsets.only(left: 5, right: 5, bottom: 5),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           //input field and buttons
 
@@ -269,7 +269,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   //input field
                   Expanded(
                     child: TextField(
-                      controller: _textController,
+                      enableSuggestions: true,
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       onTap: () {
@@ -338,8 +338,15 @@ class _ChatScreenState extends State<ChatScreen> {
           MaterialButton(
               onPressed: () {
                 if (_textController.text.isNotEmpty) {
-                  APIs.sendMessage(
-                      widget.user, _textController.text, Type.text);
+                  if (_list.isEmpty) {
+                    //on first message add user to my_user collection of chat user
+                    APIs.sendFirstMessage(
+                        widget.user, _textController.text, Type.text);
+                  } else {
+                    //send message
+                    APIs.sendMessage(
+                        widget.user, _textController.text, Type.text);
+                  }
                   _textController.text = '';
                 }
               },

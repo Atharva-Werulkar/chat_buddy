@@ -57,7 +57,7 @@ class APIs {
       final body = {
         "to": chatUser.pushToken,
         "notification": {
-          "title": chatUser.name,
+          "title": me.name,
           "body": msg,
           "android_channel_id": "chats",
         },
@@ -151,13 +151,41 @@ class APIs {
         .set(chatUser.toJson());
   }
 
-  //for getting all Users
+  //for getting id's of known users
 
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers() {
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getMyUsersId() {
     return firestore
         .collection('users')
-        .where('id', isNotEqualTo: user.uid)
+        .doc(user.uid)
+        .collection('my_users')
         .snapshots();
+  }
+
+  //for getting all Users
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers(
+      List<String> ids) {
+    log('Ids: $ids');
+
+    return firestore
+        .collection('users')
+        .where('id',
+            whereIn:
+                ids.isEmpty ? [''] : ids) //because empty list throws an error
+        // .where('id', whereIn: ids)
+        .snapshots();
+  }
+
+  //for adding an user to my user when first message is sent
+
+  static Future<void> sendFirstMessage(
+      ChatUser chatUser, String msg, Type type) async {
+    await firestore
+        .collection('users')
+        .doc(chatUser.id)
+        .collection('my_users')
+        .doc(user.uid)
+        .set({}).then((value) => sendMessage(chatUser, msg, type));
   }
 
   //for updating user
