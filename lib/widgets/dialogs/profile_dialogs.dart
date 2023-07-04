@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_buddy/main.dart';
 import 'package:chat_buddy/models/chat_user.dart';
+import 'package:chat_buddy/screens/view_profile_picture.dart';
 import 'package:chat_buddy/screens/view_profile_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -23,15 +24,24 @@ class ProfileDialog extends StatelessWidget {
             Positioned(
               top: size.height * .075,
               left: size.width * .05,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(size.height * .3),
-                child: CachedNetworkImage(
-                  width: size.width * .5,
-                  height: size.width * .5,
-                  fit: BoxFit.fill,
-                  imageUrl: user.image,
-                  errorWidget: (context, url, error) => const CircleAvatar(
-                    child: Icon(Icons.person),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => ShowProfile(imageUrl: user.image)),
+                  );
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(size.height * .3),
+                  child: CachedNetworkImage(
+                    width: size.width * .5,
+                    height: size.width * .5,
+                    fit: BoxFit.contain,
+                    imageUrl: user.image,
+                    errorWidget: (context, url, error) => const CircleAvatar(
+                      child: Icon(Icons.person),
+                    ),
                   ),
                 ),
               ),

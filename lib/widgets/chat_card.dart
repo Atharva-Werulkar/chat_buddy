@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_buddy/api/apis.dart';
 import 'package:chat_buddy/components/date_util.dart';
+import 'package:chat_buddy/components/dialogs.dart';
 import 'package:chat_buddy/main.dart';
 import 'package:chat_buddy/models/chat_user.dart';
 import 'package:chat_buddy/models/message.dart';
@@ -34,6 +35,9 @@ class _ChatCardState extends State<ChatCard> {
                   builder: (_) => ChatScreen(
                         user: widget.user,
                       )));
+        },
+        onLongPress: () {
+          _deleteChatAction(context);
         },
         child: StreamBuilder(
           stream: APIs.getAllMessages(widget.user),
@@ -108,6 +112,38 @@ class _ChatCardState extends State<ChatCard> {
             );
           },
         ),
+      ),
+    );
+  }
+
+  void _deleteChatAction(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Delete Chat'),
+        content: const Text('Are you sure you want to delete this chat?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              // Close dialog
+              Navigator.pop(context);
+            },
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              // Perform the deletion
+
+              APIs.deleteChatAction(APIs.me, widget.user);
+
+              // Close dialog
+              Navigator.pop(context);
+              // Show snackbar or any other feedback
+              Dialogs.showSnakbar(context, 'Chat Deleted');
+            },
+            child: const Text('Delete'),
+          ),
+        ],
       ),
     );
   }

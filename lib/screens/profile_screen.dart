@@ -9,9 +9,11 @@ import 'package:chat_buddy/components/dialogs.dart';
 import 'package:chat_buddy/main.dart';
 import 'package:chat_buddy/models/chat_user.dart';
 import 'package:chat_buddy/screens/auth/login_screen.dart';
+import 'package:chat_buddy/screens/view_profile_picture.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -88,32 +90,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Stack(
                     children: [
                       //user Profile Picture
-
-                      _image != null
-                          ? ClipRRect(
-                              borderRadius:
-                                  BorderRadius.circular(size.height * .1),
-                              child: Image.file(
-                                File(_image!),
-                                width: size.height * .2,
-                                height: size.height * .2,
-                                fit: BoxFit.contain,
-                              ),
-                            )
-                          : ClipRRect(
-                              borderRadius:
-                                  BorderRadius.circular(size.height * .1),
-                              child: CachedNetworkImage(
-                                width: size.height * .2,
-                                height: size.height * .2,
-                                fit: BoxFit.cover,
-                                imageUrl: widget.user.image,
-                                errorWidget: (context, url, error) =>
-                                    const CircleAvatar(
-                                  child: Icon(Icons.person),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) =>
+                                    ShowProfile(imageUrl: widget.user.image)),
+                          );
+                        },
+                        child: _image != null
+                            ? ClipRRect(
+                                borderRadius:
+                                    BorderRadius.circular(size.height * .1),
+                                child: Image.file(
+                                  File(_image!),
+                                  width: size.height * .2,
+                                  height: size.height * .2,
+                                  fit: BoxFit.contain,
+                                ),
+                              )
+                            : ClipRRect(
+                                borderRadius:
+                                    BorderRadius.circular(size.height * .1),
+                                child: CachedNetworkImage(
+                                  width: size.height * .2,
+                                  height: size.height * .2,
+                                  fit: BoxFit.cover,
+                                  imageUrl: widget.user.image,
+                                  errorWidget: (context, url, error) =>
+                                      const CircleAvatar(
+                                    child: Icon(Icons.person),
+                                  ),
                                 ),
                               ),
-                            ),
+                      ),
 
                       //edit profile button
                       Positioned(
@@ -260,17 +271,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ButtonStyle(iconSize: MaterialStateProperty.all(30)),
                       onPressed: () async {
                         final ImagePicker picker = ImagePicker();
+                        final ImageCropper cropper = ImageCropper();
+
                         // Pick an image .
                         final XFile? image =
                             await picker.pickImage(source: ImageSource.gallery);
+
                         if (image != null) {
                           log('image path: ${image.path} --MimeType: ${image.mimeType}');
 
-                          setState(() {
-                            _image = image.path;
-                          });
+                          final CroppedFile? crop = await cropper.cropImage(
+                              sourcePath: image.path,
+                              aspectRatio:
+                                  const CropAspectRatio(ratioX: 1, ratioY: 1),
+                              compressQuality: 100,
+                              compressFormat: ImageCompressFormat.jpg);
+                          if (crop != null) {
+                            setState(() {
+                              _image = crop.path;
+                            });
+                            APIs.updateProfilePicture(File(_image!));
+                          }
 
-                          APIs.updateProfilePicture(File(_image!));
                           //for hiding bottom sheet
                           Navigator.pop(context);
                         }

@@ -29,6 +29,8 @@ class APIs {
   //For Accessing Firebase Messaging
   static FirebaseMessaging fmessaging = FirebaseMessaging.instance;
 
+  //----- APIs Functions -----//
+
   //for getting push token
   static Future<void> getFirebaseMessagingToken() async {
     await fmessaging.requestPermission();
@@ -111,6 +113,23 @@ class APIs {
       //user not exists
       return false;
     }
+  }
+
+  //for deleting user form firestore
+  static void deleteChatAction(ChatUser currentUserId, ChatUser deletId) {
+    firestore
+        .collection('users')
+        .doc(currentUserId.id)
+        .collection('my_users')
+        .doc(deletId.id)
+        .delete()
+        .then((_) {
+      // Chat successfully deleted
+      log('Chat deleted with user: $deletId');
+    }).catchError((error) {
+      // An error occurred while deleting the chat
+      print('Failed to delete chat: $error');
+    });
   }
 
   //for showing logined user info
@@ -207,14 +226,14 @@ class APIs {
     //store file with extension
     final ref = storage.ref().child('profile_picture/${user.uid}.$ext');
 
-//uploading file to firebase storage
+    //uploading file to firebase storage
     await ref
         .putFile(file, SettableMetadata(contentType: 'image/$ext'))
         .then((val) {
       log('Data Transfered: ${val.bytesTransferred / 1000}kb');
     });
 
-//updating user profile picture
+    //updating user profile picture
     me.image = await ref.getDownloadURL();
 
     await firestore.collection('users').doc(user.uid).update({
@@ -242,7 +261,7 @@ class APIs {
     });
   }
 
-  //-----Chat Screen Related APIs-----//
+  //<-----Chat Screen Related APIs----->//
 
   //for getting converstion id
   static String getConversationId(String id) => user.uid.hashCode <= id.hashCode

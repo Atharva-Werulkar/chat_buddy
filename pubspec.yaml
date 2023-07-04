@@ -19,10 +19,12 @@ dependencies:
   firebase_auth: ^4.6.2
   google_sign_in: ^6.1.4
   cloud_firestore: ^4.8.0
+
+
   #To show images
   cached_network_image: ^3.2.3
   image_picker: ^0.8.9
-  image_cropper: ^1.4.1
+  image_cropper: ^4.0.0
 
   #For accessing Firebase Storage
   firebase_storage: ^11.2.3

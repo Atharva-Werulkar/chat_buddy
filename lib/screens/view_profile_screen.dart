@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_buddy/components/date_util.dart';
 import 'package:chat_buddy/main.dart';
 import 'package:chat_buddy/models/chat_user.dart';
+import 'package:chat_buddy/screens/view_profile_picture.dart';
 import 'package:flutter/material.dart';
 
 //view profile screen
@@ -55,15 +56,25 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                   height: size.height * .05,
                 ),
 
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(size.height * .1),
-                  child: CachedNetworkImage(
-                    width: size.height * .2,
-                    height: size.height * .2,
-                    fit: BoxFit.cover,
-                    imageUrl: widget.user.image,
-                    errorWidget: (context, url, error) => const CircleAvatar(
-                      child: Icon(Icons.person),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) =>
+                              ShowProfile(imageUrl: widget.user.image)),
+                    );
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(size.height * .1),
+                    child: CachedNetworkImage(
+                      width: size.height * .2,
+                      height: size.height * .2,
+                      fit: BoxFit.contain,
+                      imageUrl: widget.user.image,
+                      errorWidget: (context, url, error) => const CircleAvatar(
+                        child: Icon(Icons.person),
+                      ),
                     ),
                   ),
                 ),

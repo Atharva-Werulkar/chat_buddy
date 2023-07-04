@@ -43,9 +43,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    //   statusBarColor: Colors.transparent, // Make the status bar transparent
-    // ));
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light.copyWith(
         statusBarColor: Colors.transparent, // Make the status bar transparent
@@ -53,7 +50,6 @@ class _ChatScreenState extends State<ChatScreen> {
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: SafeArea(
-          maintainBottomViewPadding: true,
           child: WillPopScope(
             //if emoji picker is open then close it
             onWillPop: () {
@@ -241,7 +237,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget _chatBody() {
     return Padding(
-      padding: const EdgeInsets.only(left: 5, right: 5, bottom: 5),
+      padding: EdgeInsets.symmetric(
+          vertical: size.height * .01, horizontal: size.width * .020),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -269,7 +266,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   //input field
                   Expanded(
                     child: TextField(
-                      enableSuggestions: true,
+                      controller: _textController,
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       onTap: () {
@@ -335,6 +332,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
 
           //send button
+
           MaterialButton(
               onPressed: () {
                 if (_textController.text.isNotEmpty) {
