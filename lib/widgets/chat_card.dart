@@ -28,6 +28,7 @@ class _ChatCardState extends State<ChatCard> {
       margin: EdgeInsets.symmetric(horizontal: size.width * .02, vertical: 5),
       elevation: 0.1,
       child: InkWell(
+        //on tap open chat screen
         onTap: () {
           Navigator.push(
               context,
@@ -36,6 +37,7 @@ class _ChatCardState extends State<ChatCard> {
                         user: widget.user,
                       )));
         },
+        //on long press show delete chat dialog
         onLongPress: () {
           _deleteChatAction(context);
         },
@@ -133,12 +135,12 @@ class _ChatCardState extends State<ChatCard> {
           TextButton(
             onPressed: () {
               // Perform the deletion
-
               APIs.deleteChatAction(APIs.me, widget.user);
 
               // Close dialog
               Navigator.pop(context);
-              // Show snackbar or any other feedback
+
+              // Show snackbar
               Dialogs.showSnakbar(context, 'Chat Deleted');
             },
             child: const Text('Delete'),

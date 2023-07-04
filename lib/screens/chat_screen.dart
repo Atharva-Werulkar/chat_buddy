@@ -48,7 +48,6 @@ class _ChatScreenState extends State<ChatScreen> {
         statusBarColor: Colors.transparent, // Make the status bar transparent
       ),
       child: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
         child: SafeArea(
           child: WillPopScope(
             //if emoji picker is open then close it

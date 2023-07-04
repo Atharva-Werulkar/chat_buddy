@@ -115,7 +115,7 @@ class APIs {
     }
   }
 
-  //for deleting user form firestore
+  //for deleting chat user form firestore
   static void deleteChatAction(ChatUser currentUserId, ChatUser deletId) {
     firestore
         .collection('users')
@@ -128,7 +128,7 @@ class APIs {
       log('Chat deleted with user: $deletId');
     }).catchError((error) {
       // An error occurred while deleting the chat
-      print('Failed to delete chat: $error');
+      log('Failed to delete chat: $error');
     });
   }
 

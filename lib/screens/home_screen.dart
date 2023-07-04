@@ -118,6 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
           floatingActionButton: Padding(
             padding: const EdgeInsets.only(bottom: 40),
             child: FloatingActionButton(
+              backgroundColor: Colors.white,
               onPressed: () {
                 _addChatUserDialog();
               },

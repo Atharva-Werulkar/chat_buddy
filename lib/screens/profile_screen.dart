@@ -9,7 +9,7 @@ import 'package:chat_buddy/components/dialogs.dart';
 import 'package:chat_buddy/main.dart';
 import 'package:chat_buddy/models/chat_user.dart';
 import 'package:chat_buddy/screens/auth/login_screen.dart';
-import 'package:chat_buddy/screens/view_profile_picture.dart';
+import 'package:chat_buddy/screens/view_picture.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -44,6 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 15),
           child: FloatingActionButton.extended(
+            backgroundColor: Colors.white,
             onPressed: () async {
               Dialogs.showProgressBar(context);
 
@@ -96,7 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             context,
                             MaterialPageRoute(
                                 builder: (_) =>
-                                    ShowProfile(imageUrl: widget.user.image)),
+                                    ShowPicture(imageUrl: widget.user.image)),
                           );
                         },
                         child: _image != null
@@ -206,6 +207,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   //update profile button
                   ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
                           shape: const StadiumBorder(),
                           minimumSize:
                               Size(size.width * .5, size.height * .06)),
@@ -219,12 +221,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         }
                       },
                       icon: const Icon(
+                        color: Colors.black,
                         Icons.edit,
                         size: 28,
                       ),
                       label: const Text(
                         'UPDATE',
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 16, color: Colors.black),
                       ))
                 ],
               ),

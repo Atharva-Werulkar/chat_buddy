@@ -11,6 +11,7 @@ import 'package:chat_buddy/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:photo_view/photo_view.dart';
 
 class MessageCard extends StatefulWidget {
   const MessageCard({super.key, required this.message});
@@ -68,16 +69,23 @@ class _MessageCardState extends State<MessageCard> {
                 //showing image message
                 ClipRRect(
                     borderRadius: BorderRadius.circular(15),
-                    child: CachedNetworkImage(
-                      imageUrl: widget.message.msg,
-                      placeholder: (context, url) => const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
+                    child: GestureDetector(
+                      onTap: () {
+                        if (widget.message.type == Type.image) {
+                          _showImage(widget.message.msg);
+                        }
+                      },
+                      child: CachedNetworkImage(
+                        imageUrl: widget.message.msg,
+                        placeholder: (context, url) => const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ),
                         ),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.image),
                       ),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.image),
                     ),
                   ),
           ),
@@ -122,14 +130,6 @@ class _MessageCardState extends State<MessageCard> {
             //for some space
             SizedBox(width: size.width * .04),
 
-            // //blue tick
-            // if (widget.message.read.isNotEmpty)
-            //   const Icon(
-            //     Icons.done_all,
-            //     color: Colors.blue,
-            //     size: 20,
-            //   ),
-
             // //for some space
 
             const SizedBox(width: 2),
@@ -169,16 +169,23 @@ class _MessageCardState extends State<MessageCard> {
                 //showing image message
                 ClipRRect(
                     borderRadius: BorderRadius.circular(15),
-                    child: CachedNetworkImage(
-                      imageUrl: widget.message.msg,
-                      placeholder: (context, url) => const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
+                    child: GestureDetector(
+                      onTap: () {
+                        if (widget.message.type == Type.image) {
+                          _showImage(widget.message.msg);
+                        }
+                      },
+                      child: CachedNetworkImage(
+                        imageUrl: widget.message.msg,
+                        placeholder: (context, url) => const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ),
                         ),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.image),
                       ),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.image),
                     ),
                   ),
           ),
@@ -383,6 +390,24 @@ class _MessageCardState extends State<MessageCard> {
                 )
               ],
             ));
+  }
+
+  //Show Image in dialog
+  void _showImage(String image) {
+    showDialog(
+      context: context,
+      builder: (_) => SizedBox(
+        width: size.width * 0.8,
+        height: size.height * 0.6,
+        child: PhotoView(
+          initialScale: PhotoViewComputedScale.contained,
+          imageProvider: CachedNetworkImageProvider(image),
+          loadingBuilder: (context, event) => const Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+      ),
+    );
   }
 }
 

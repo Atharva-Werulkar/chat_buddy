@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_buddy/main.dart';
 import 'package:chat_buddy/models/chat_user.dart';
-import 'package:chat_buddy/screens/view_profile_picture.dart';
+import 'package:chat_buddy/screens/view_picture.dart';
 import 'package:chat_buddy/screens/view_profile_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +29,7 @@ class ProfileDialog extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => ShowProfile(imageUrl: user.image)),
+                        builder: (_) => ShowPicture(imageUrl: user.image)),
                   );
                 },
                 child: ClipRRect(
