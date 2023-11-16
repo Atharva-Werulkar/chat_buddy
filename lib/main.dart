@@ -29,18 +29,7 @@ class MyApp extends StatelessWidget {
       title: 'Chat Buddy',
 
       theme: ThemeData(
-        //  App BAR THEME
-        // appBarTheme: const AppBarTheme(
-        //   centerTitle: true,
-        //   elevation: 5,
-        //   backgroundColor: Colors.white,
-        //   titleTextStyle: TextStyle(
-        //     color: Colors.black,
-        //     fontWeight: FontWeight.normal,
-        //     fontSize: 20,
-        //   ),
-        //   iconTheme: IconThemeData(color: Colors.black),
-        // ),
+
         useMaterial3: true,
       ),
 
